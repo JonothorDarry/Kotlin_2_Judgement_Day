@@ -21,18 +21,20 @@ class MainActivity : AppCompatActivity() {
         val allList=findViewById<LinearLayout>(R.id.projects)
 
         val base=Databaze.dbCreator(applicationContext)
-        val lst=base?.getMyrDao()?.loadColors()
-        val view = TextView(this)
-        view.text = lst?.get(1)
-        allList.addView(view)
-
-
-
-        for (x in PreservedProjects.Companion.allProjects){
-            val view = TextView(this)
-            view.text = x.html()
+        if (base!=null) {
+            val lst = base.getMyrDao().loadColors()
+            var view = TextView(this)
+            view.text = lst.get(1)
             allList.addView(view)
+
+            val namez = base.getMyrDao().getInvNames()
+            for (x in namez) {
+                view = TextView(this)
+                view.text = x
+                allList.addView(view)
+            }
         }
+
 
         val sSet = findViewById<Button>(R.id.settings)
         sSet?.setOnClickListener(){

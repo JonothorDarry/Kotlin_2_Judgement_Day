@@ -21,12 +21,18 @@ class NewProject : AppCompatActivity() {
         sOK?.setOnClickListener(){
             val newPage=findViewById<EditText>(R.id.urlEnd)
             val strNewPage=newPage.text.toString()
+            val projName=findViewById<EditText>(R.id.projName).text.toString()
 
             var doc: Document
 
             DoAsync {
                 doc = Jsoup.connect(PreservedSettings.page+strNewPage+".xml").get()
                 PreservedProjects.Companion.allProjects.add(doc)
+
+                val base=Databaze.dbCreator(applicationContext)
+                var inv=DbInventories(strNewPage.toInt(), 1, 0, projName)
+
+                base?.getMyrDao()?.insertInventory(inv)
             }.execute()
 
             val intent = Intent(this, MainActivity::class.java)
