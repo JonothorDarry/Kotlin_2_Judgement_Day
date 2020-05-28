@@ -1,11 +1,16 @@
 package com.example.bricklist
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,6 +19,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val allList=findViewById<LinearLayout>(R.id.projects)
+
+        val base=Databaze.dbCreator(applicationContext)
+        val lst=base?.getMyrDao()?.loadColors()
+        val view = TextView(this)
+        view.text = lst?.get(1)
+        allList.addView(view)
+
+
+
         for (x in PreservedProjects.Companion.allProjects){
             val view = TextView(this)
             view.text = x.html()
