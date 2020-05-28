@@ -7,6 +7,6 @@ import org.jsoup.nodes.Document
 @SuppressLint("Registered")
 class PreservedProjects : Application() {
     companion object {
-        var allProjects=mutableListOf<Document>()
+        var projectId: Int=0
     }
 }

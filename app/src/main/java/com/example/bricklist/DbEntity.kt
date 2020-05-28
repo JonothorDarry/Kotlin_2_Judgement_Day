@@ -67,9 +67,34 @@ interface MyDao{
     @Query("select name from ItemTypes")
     fun loadItems(): List<String>
 
-    @Query("select name from Inventories")
-    fun getInvNames(): List<String>
+
+
+
+    @Query("select * from Inventories")
+    fun getInvNames(): List<DbInventories>
+
+    @Query("select * from InventoriesParts where InventoryID= :invId")
+    fun getInvParts(invId: Int): List<DbInventoriesParts>
+
+    @Query("select id from Parts where code= :code")
+    fun getItemID(code: String): List<Int>
+
+    @Query("select id from ItemTypes where code= :code")
+    fun getTypeID(code: String): List<Int>
+
+    @Query("select id from Colors where code= :code")
+    fun getColorID(code: Int): List<Int>
+
+    @Query("select max(id) from InventoriesParts")
+    fun getMaxInvPartId(): Int?
+
+    @Query("select name from Parts where id= :id")
+    fun getName(id: Int): String?
+
 
     @Insert
     fun insertInventory(inventory: DbInventories)
+
+    @Insert
+    fun insertInventoryPart(inventoryPart: DbInventoriesParts)
 }

@@ -30,14 +30,19 @@ class MainActivity : AppCompatActivity() {
             val namez = base.getMyrDao().getInvNames()
             for (x in namez) {
                 view = TextView(this)
-                view.text = x
+                view.text = x.Name
+                view.setOnClickListener {
+                    PreservedProjects.projectId=x.id
+                    val intent = Intent(this, SingleSet::class.java)
+                    startActivity(intent)
+                }
                 allList.addView(view)
             }
         }
 
 
         val sSet = findViewById<Button>(R.id.settings)
-        sSet?.setOnClickListener(){
+        sSet?.setOnClickListener {
             val intent = Intent(this, Settings::class.java)
             startActivity(intent)
         }

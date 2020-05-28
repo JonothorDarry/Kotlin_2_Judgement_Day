@@ -27,12 +27,14 @@ class NewProject : AppCompatActivity() {
 
             DoAsync {
                 doc = Jsoup.connect(PreservedSettings.page+strNewPage+".xml").get()
-                PreservedProjects.Companion.allProjects.add(doc)
 
                 val base=Databaze.dbCreator(applicationContext)
                 var inv=DbInventories(strNewPage.toInt(), 1, 0, projName)
 
-                base?.getMyrDao()?.insertInventory(inv)
+                if (base!=null){
+                    base.getMyrDao().insertInventory(inv)
+                    XMLOperations.createInvPartFromXml(doc, strNewPage.toInt(), base)
+                }
             }.execute()
 
             val intent = Intent(this, MainActivity::class.java)
