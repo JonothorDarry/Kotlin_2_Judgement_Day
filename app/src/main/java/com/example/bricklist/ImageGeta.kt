@@ -26,12 +26,24 @@ class ImageGeta {
             val st3="https://www.bricklink.com/PL/"
             var im1: Bitmap?
             var kode: Int?=0
+            var kolor: Int?=0
+            var itype: String?=""
 
-            if (db!=null){
-                kode=db.getMyrDao().getCode(colorID, itemID)
+            if (db!=null) {
+                kode = db.getMyrDao().getCode(colorID, itemID)
+                kolor=db.getMyrDao().getColorNumber(colorID)
+                itype=db.getMyrDao().getCode(itemID)
             }
-            im1=checkExistence(st1+kode?.toString())
 
+            im1=checkExistence(st1+kode?.toString())
+            if (im1!=null) return im1
+
+            im1=checkExistence("$st2$kolor/$itype.gif")
+            if (im1!=null) return im1
+
+            Log.d("TAG", "$st3$itype.jpg")
+            im1= checkExistence("$st3$itype.jpg")
+            if (im1!=null) Log.d("TAG","KAPPA Fchuj")
             return im1
         }
     }

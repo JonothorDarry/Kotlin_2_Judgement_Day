@@ -14,7 +14,7 @@ class XMLOperations {
         fun createInvPartFromXml(xml: Document, InventoryID: Int, db: Databaze){
             if (id==-1){
                 val st=db.getMyrDao().getMaxInvPartId()
-                if (st!=null) id=st
+                if (st!=null) id=st+1
                 else id=1
                 Log.d("TAG", id.toString())
             }
@@ -63,6 +63,8 @@ class XMLOperations {
                     val stream = ByteArrayOutputStream()
                     img.compress(Bitmap.CompressFormat.JPEG, 100, stream)
                     val bitmapdata = stream.toByteArray()
+
+                    if (db.getMyrDao().existCode(ItemID, ColorID)==0) db.getMyrDao().createCode(db.getMyrDao().getMaxCode()+1, ItemID, ColorID)
                     db.getMyrDao().setImage(ColorID, ItemID, bitmapdata)
                 }
 
