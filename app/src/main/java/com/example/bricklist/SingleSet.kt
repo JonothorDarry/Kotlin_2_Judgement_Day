@@ -1,9 +1,11 @@
 package com.example.bricklist
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +26,8 @@ class SingleSet : AppCompatActivity() {
             var color_id: TextView
             var plusButt: Button
             var minusButt: Button
+            var image: ImageView
+            var barray: ByteArray?
 
             var vk : LinearLayout
 
@@ -37,6 +41,7 @@ class SingleSet : AppCompatActivity() {
                 var enumera= TextView(this)
                 minusButt= Button(this)
                 plusButt= Button(this)
+                image= ImageView(this)
 
                 minusButt.text="-"
                 plusButt.text="+"
@@ -45,6 +50,10 @@ class SingleSet : AppCompatActivity() {
                     name.text = Databaze.myDb?.getMyrDao()?.getName(x.ItemID)
                     color_id.text=Databaze.myDb?.getMyrDao()?.getColor(x.ColorID)+" ["+Databaze.myDb?.getMyrDao()?.getCode(x.ItemID)+"]"
                     enumera.text=x.QuantityInStore.toString()+" of "+x.QuantityInSet.toString()
+                    barray=Databaze.myDb?.getMyrDao()?.getImage(x.ColorID, x.ItemID)
+                    if (barray!=null){
+                        image.setImageBitmap(BitmapFactory.decodeByteArray(barray, 0, barray.size))
+                    }
                 }
 
                 minusButt.layoutParams=ViewGroup.LayoutParams(120, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -63,6 +72,7 @@ class SingleSet : AppCompatActivity() {
                 vk.addView(enumera)
                 vk.addView(minusButt)
                 vk.addView(plusButt)
+                vk.addView(image)
 
                 allList.addView(vk)
             }

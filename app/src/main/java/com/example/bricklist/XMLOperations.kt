@@ -1,8 +1,11 @@
 package com.example.bricklist
 
+import android.graphics.Bitmap
 import android.util.Log
+import androidx.core.graphics.drawable.toDrawable
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
+import java.io.ByteArrayOutputStream
 
 class XMLOperations {
     companion object{
@@ -55,6 +58,14 @@ class XMLOperations {
 
                 val elem=DbInventoriesParts(id, InventoryID, TypeID, ItemID, QuantityInSet, QuantityInStore, ColorID, Extra)
                 db.getMyrDao().insertInventoryPart(elem)
+                val img=ImageGeta.getImage(ColorID, ItemID)
+                if (img!=null){
+                    val stream = ByteArrayOutputStream()
+                    img.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+                    val bitmapdata = stream.toByteArray()
+                    db.getMyrDao().setImage(ColorID, ItemID, bitmapdata)
+                }
+
                 id += 1
                 Log.d("TAG", id.toString())
             }

@@ -2,6 +2,7 @@ package com.example.bricklist
 
 import android.graphics.Bitmap
 import androidx.room.*
+import java.sql.Blob
 
 
 @Entity(tableName = "Colors")
@@ -99,6 +100,16 @@ interface MyDao{
 
     @Query("update InventoriesParts set QuantityInStore= :amount where id= :id")
     fun updateStore(amount: Int, id: Int)
+
+    @Query("select code from codes where ColorID= :colorID and ItemID= :itemID")
+    fun getCode(colorID: Int, itemID: Int): Int?
+
+    @Query("select image from codes where ColorID= :colorID and ItemID= :itemID")
+    fun getImage(colorID: Int, itemID: Int): ByteArray?
+
+    @Query("update codes set image= :img where ColorID= :ColorID and ItemID= :ItemID")
+    fun setImage(ColorID: Int, ItemID: Int, img: ByteArray)
+
 
 
     @Insert
