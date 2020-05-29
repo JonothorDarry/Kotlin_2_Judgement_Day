@@ -97,6 +97,9 @@ interface MyDao{
     @Query("select code from Parts where id= :id")
     fun getCode(id: Int): String?
 
+    @Query("update InventoriesParts set QuantityInStore= :amount where id= :id")
+    fun updateStore(amount: Int, id: Int)
+
 
     @Insert
     fun insertInventory(inventory: DbInventories)

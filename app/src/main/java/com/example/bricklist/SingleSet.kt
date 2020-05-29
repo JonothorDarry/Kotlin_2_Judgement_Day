@@ -22,7 +22,8 @@ class SingleSet : AppCompatActivity() {
 
             var name :TextView
             var color_id: TextView
-            var enumera: TextView
+            var plusButt: Button
+            var minusButt: Button
 
             var vk : LinearLayout
 
@@ -33,7 +34,12 @@ class SingleSet : AppCompatActivity() {
 
                 name = TextView(this)
                 color_id= TextView(this)
-                enumera= TextView(this)
+                var enumera= TextView(this)
+                minusButt= Button(this)
+                plusButt= Button(this)
+
+                minusButt.text="-"
+                plusButt.text="+"
 
                 if (Databaze.myDb!=null) {
                     name.text = Databaze.myDb?.getMyrDao()?.getName(x.ItemID)
@@ -41,9 +47,23 @@ class SingleSet : AppCompatActivity() {
                     enumera.text=x.QuantityInStore.toString()+" of "+x.QuantityInSet.toString()
                 }
 
+                minusButt.layoutParams=ViewGroup.LayoutParams(120, ViewGroup.LayoutParams.WRAP_CONTENT)
+                plusButt.layoutParams=ViewGroup.LayoutParams(120, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+                minusButt.setOnClickListener {
+                    Buttonizer.change(-1, x, enumera)
+                }
+
+                plusButt.setOnClickListener {
+                    Buttonizer.change(1, x, enumera)
+                }
+
                 vk.addView(name)
                 vk.addView(color_id)
                 vk.addView(enumera)
+                vk.addView(minusButt)
+                vk.addView(plusButt)
+
                 allList.addView(vk)
             }
         }
