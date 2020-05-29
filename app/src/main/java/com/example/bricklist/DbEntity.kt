@@ -62,15 +62,6 @@ data class DbInventoriesParts (
 
 @Dao
 interface MyDao{
-    @Query("select name from Colors")
-    fun loadColors(): List<String>
-
-    @Query("select name from ItemTypes")
-    fun loadItems(): List<String>
-
-
-
-
     @Query("select * from Inventories")
     fun getInvNames(): List<DbInventories>
 
@@ -80,8 +71,15 @@ interface MyDao{
     @Query("select id from Parts where code= :code")
     fun getItemID(code: String): List<Int>
 
+
+
     @Query("select id from ItemTypes where code= :code")
     fun getTypeID(code: String): List<Int>
+
+    @Query("select code from ItemTypes where id= :id")
+    fun getTypeCode(id: Int): String?
+
+
 
     @Query("select id from Colors where code= :code")
     fun getColorID(code: Int): List<Int>

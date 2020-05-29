@@ -84,7 +84,10 @@ class SingleSet : AppCompatActivity() {
             startActivity(intent)
         }
 
-
+        val sExpo=findViewById<Button>(R.id.exporter)
+        sExpo?.setOnClickListener(){
+            Exporter.exportXML(this@SingleSet, applicationContext)
+        }
     }
 }
 

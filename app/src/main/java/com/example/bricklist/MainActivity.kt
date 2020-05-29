@@ -25,10 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         val base=Databaze.dbCreator(applicationContext)
         if (base!=null) {
-            val lst = base.getMyrDao().loadColors()
-            var view = TextView(this)
-            view.text = lst.get(1)
-            allList.addView(view)
+            var view: TextView
 
             val namez = base.getMyrDao().getInvNames()
             for (x in namez) {
