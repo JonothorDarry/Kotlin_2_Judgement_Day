@@ -18,6 +18,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //val intent = Intent(this, Export::class.java)
+        //startActivity(intent)
+
         val allList=findViewById<LinearLayout>(R.id.projects)
 
         val base=Databaze.dbCreator(applicationContext)

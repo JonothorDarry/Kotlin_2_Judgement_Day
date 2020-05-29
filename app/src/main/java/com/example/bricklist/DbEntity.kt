@@ -91,6 +91,12 @@ interface MyDao{
     @Query("select name from Parts where id= :id")
     fun getName(id: Int): String?
 
+    @Query("select name from Colors where id= :id")
+    fun getColor(id: Int): String?
+
+    @Query("select code from Parts where id= :id")
+    fun getCode(id: Int): String?
+
 
     @Insert
     fun insertInventory(inventory: DbInventories)
