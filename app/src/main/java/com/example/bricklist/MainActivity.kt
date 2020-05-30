@@ -1,5 +1,6 @@
 package com.example.bricklist
 
+import android.app.Application
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
@@ -7,16 +8,18 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import kotlin.concurrent.fixedRateTimer
 
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         val allList=findViewById<LinearLayout>(R.id.projects)
 
@@ -44,6 +47,13 @@ class MainActivity : AppCompatActivity() {
         sSet?.setOnClickListener {
             val intent = Intent(this, Settings::class.java)
             startActivity(intent)
+        }
+
+        fixedRateTimer("timer", false, 0L, 1000) {
+            this@MainActivity.runOnUiThread {
+                projectText.text = SharedWisdom.communicate
+                infText.text=SharedWisdom.current.toString()
+            }
         }
 
         val sNew = findViewById<Button>(R.id.newp)

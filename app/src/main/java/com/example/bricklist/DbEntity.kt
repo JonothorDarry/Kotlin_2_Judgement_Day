@@ -66,36 +66,34 @@ interface MyDao{
     @Query("select * from InventoriesParts where InventoryID= :invId order by QuantityInSet-QuantityInStore desc")
     fun getInvParts(invId: Int): List<DbInventoriesParts>
 
-
+    //Get id By code - mainly reading xml
     @Query("select id from Parts where code= :code")
     fun getItemID(code: String): List<Int>
-
-
-
     @Query("select id from ItemTypes where code= :code")
     fun getTypeID(code: String): List<Int>
-
-    @Query("select code from ItemTypes where id= :id")
-    fun getTypeCode(id: Int): String?
-
-
-
     @Query("select id from Colors where code= :code")
     fun getColorID(code: Int): List<Int>
 
-    @Query("select max(id) from InventoriesParts")
-    fun getMaxInvPartId(): Int?
 
+    //Get things by unique id
+    @Query("select code from ItemTypes where id= :id")
+    fun getTypeCode(id: Int): String?
     @Query("select name from Parts where id= :id")
     fun getName(id: Int): String?
-
+    @Query("select namepl from Parts where id= :id")
+    fun getPlName(id: Int): String?
     @Query("select name from Colors where id= :id")
     fun getColor(id: Int): String?
-
     @Query("select code from Colors where id= :id")
     fun getColorNumber(id: Int): Int?
+    @Query("select code from Parts where id= :id")
+    fun getCode(id: Int): String?
 
 
+    @Query("select max(id) from InventoriesParts")
+    fun getMaxInvPartId(): Int?
+    @Query("select max(id) from Parts")
+    fun getMaxPartsId(): Int
 
     @Query ("select count(*) from Codes where ItemID= :itemID and ColorID= :colorID")
     fun existCode(itemID: Int, colorID: Int): Int
@@ -108,15 +106,13 @@ interface MyDao{
 
 
 
-    @Query("select code from Parts where id= :id")
-    fun getCode(id: Int): String?
-
     @Query("update InventoriesParts set QuantityInStore= :amount where id= :id")
     fun updateStore(amount: Int, id: Int)
 
+
+
     @Query("select code from codes where ColorID= :colorID and ItemID= :itemID")
     fun getCode(colorID: Int, itemID: Int): Int?
-
     @Query("select image from codes where ColorID= :colorID and ItemID= :itemID")
     fun getImage(colorID: Int, itemID: Int): ByteArray?
     @Query("update codes set image= :img where ColorID= :ColorID and ItemID= :ItemID")
@@ -142,4 +138,6 @@ interface MyDao{
     fun insertInventory(inventory: DbInventories)
     @Insert
     fun insertInventoryPart(inventoryPart: DbInventoriesParts)
+    @Insert
+    fun insertPart(part: DbParts)
 }

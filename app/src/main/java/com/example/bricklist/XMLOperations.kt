@@ -2,10 +2,10 @@ package com.example.bricklist
 
 import android.graphics.Bitmap
 import android.util.Log
-import androidx.core.graphics.drawable.toDrawable
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import java.io.ByteArrayOutputStream
+
 
 class XMLOperations {
     companion object{
@@ -34,7 +34,8 @@ class XMLOperations {
             var vect: List<Int>
 
 
-
+            SharedWisdom.all=xml.getElementsByTag("ITEM").size
+            SharedWisdom.current=0
             for (x in xml.getElementsByTag("ITEM")){
                 if (x.getElementsByTag("ALTERNATE").text()!="N") continue
 
@@ -52,7 +53,12 @@ class XMLOperations {
 
                 vect=db.getMyrDao().getItemID(itemid)
                 if (vect.isNotEmpty()) ItemID=vect[0]
-                else ItemID=0
+                else {
+                    val partId=db.getMyrDao().getMaxPartsId()
+                    ItemID=partId+1
+                    val part=DbParts("Nieznany", partId+1, itemid, "Unknown", 0, 0)
+                    db.getMyrDao().insertPart(part)
+                }
 
                 TypeID=db.getMyrDao().getTypeID(itemtype)[0]
 
@@ -69,9 +75,12 @@ class XMLOperations {
                 }
 
                 id += 1
+                SharedWisdom.current+=1
+
                 Log.d("TAG", id.toString())
             }
             db.getMyrDao().setArchivize(InventoryID, 2)
+
         }
     }
 }

@@ -28,6 +28,7 @@ class SingleSet : AppCompatActivity() {
             var minusButt: Button
             var image: ImageView
             var barray: ByteArray?
+            var plname: String?
 
             var vk : LinearLayout
 
@@ -47,7 +48,11 @@ class SingleSet : AppCompatActivity() {
                 plusButt.text="+"
 
                 if (Databaze.myDb!=null) {
-                    name.text = Databaze.myDb?.getMyrDao()?.getName(x.ItemID)
+                    plname=Databaze.myDb?.getMyrDao()?.getPlName(x.ItemID)
+                    if (plname!=null) name.text=plname
+                    else name.text = Databaze.myDb?.getMyrDao()?.getName(x.ItemID)
+
+
                     color_id.text=Databaze.myDb?.getMyrDao()?.getColor(x.ColorID)+" ["+Databaze.myDb?.getMyrDao()?.getCode(x.ItemID)+"]"
                     enumera.text=x.QuantityInStore.toString()+" of "+x.QuantityInSet.toString()
                     barray=Databaze.myDb?.getMyrDao()?.getImage(x.ColorID, x.ItemID)

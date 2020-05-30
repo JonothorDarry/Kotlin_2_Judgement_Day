@@ -13,8 +13,8 @@ import org.jsoup.nodes.Document
 class NewProject : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val TAG="StateChange"
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_new_project)
 
         val sOK = findViewById<Button>(R.id.ok)
@@ -33,6 +33,7 @@ class NewProject : AppCompatActivity() {
 
                 if (base!=null){
                     base.getMyrDao().insertInventory(inv)
+                    SharedWisdom.communicate=projName
                     XMLOperations.createInvPartFromXml(doc, strNewPage.toInt(), base)
                 }
             }.execute()
