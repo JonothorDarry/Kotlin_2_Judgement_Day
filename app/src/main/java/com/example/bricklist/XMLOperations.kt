@@ -16,7 +16,11 @@ class XMLOperations {
                 val st=db.getMyrDao().getMaxInvPartId()
                 if (st!=null) id=st+1
                 else id=1
-                Log.d("TAG", id.toString())
+            }
+            if (PreservedProjects.partsBelowUndefined==-1){
+                val st=db.getMyrDao().getMaxDefinedPartId()
+                PreservedProjects.partsBelowUndefined=st
+                Log.d("ASD", st.toString())
             }
 
             var y: Element
@@ -37,7 +41,10 @@ class XMLOperations {
             SharedWisdom.all=xml.getElementsByTag("ITEM").size
             SharedWisdom.current=0
             for (x in xml.getElementsByTag("ITEM")){
-                if (x.getElementsByTag("ALTERNATE").text()!="N") continue
+                if (x.getElementsByTag("ALTERNATE").text()!="N") {
+                    SharedWisdom.current+=1
+                    continue
+                }
 
                 y=x.getElementsByTag("EXTRA")[0]
                 if (y.text()=="P") Extra=1
@@ -52,8 +59,13 @@ class XMLOperations {
                 ColorID=db.getMyrDao().getColorID(color)[0]
 
                 vect=db.getMyrDao().getItemID(itemid)
-                if (vect.isNotEmpty()) ItemID=vect[0]
+                if (vect.isNotEmpty()) {
+                    ItemID=vect[0]
+                    Log.d("ASD", ItemID.toString())
+                    if (ItemID>PreservedProjects.partsBelowUndefined) SharedWisdom.nameDead++
+                }
                 else {
+                    SharedWisdom.nameDead++
                     val partId=db.getMyrDao().getMaxPartsId()
                     ItemID=partId+1
                     val part=DbParts("Nieznany", partId+1, itemid, "Unknown", 0, 0)
@@ -64,23 +76,28 @@ class XMLOperations {
 
                 val elem=DbInventoriesParts(id, InventoryID, TypeID, ItemID, QuantityInSet, QuantityInStore, ColorID, Extra)
                 db.getMyrDao().insertInventoryPart(elem)
-                val img=ImageGeta.getImage(ColorID, ItemID)
-                if (img!=null){
-                    val stream = ByteArrayOutputStream()
-                    img.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-                    val bitmapdata = stream.toByteArray()
 
-                    if (db.getMyrDao().existCode(ItemID, ColorID)==0) db.getMyrDao().createCode(db.getMyrDao().getMaxCode()+1, ItemID, ColorID)
-                    db.getMyrDao().setImage(ColorID, ItemID, bitmapdata)
+                val ex=db.getMyrDao().existImage(ItemID, ColorID)
+                if (ex==0) {
+                    val img = ImageGeta.getImage(ColorID, ItemID)
+                    if (img != null) {
+                        val stream = ByteArrayOutputStream()
+                        img.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+                        val bitmapdata = stream.toByteArray()
+
+                        if (db.getMyrDao().existCode(ItemID,ColorID) == 0) db.getMyrDao().createCode(db.getMyrDao().getMaxCode() + 1, ItemID, ColorID)
+                        db.getMyrDao().setImage(ColorID, ItemID, bitmapdata)
+                    }
+                    else SharedWisdom.imageDead++
                 }
 
-                id += 1
                 SharedWisdom.current+=1
+                id += 1
 
                 Log.d("TAG", id.toString())
             }
             db.getMyrDao().setArchivize(InventoryID, 2)
-
+            SharedWisdom.finish=1
         }
     }
 }

@@ -8,9 +8,13 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import java.net.HttpURLConnection
 
 
 class NewProject : AppCompatActivity() {
+    companion object{
+        var projId=-1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,19 +26,37 @@ class NewProject : AppCompatActivity() {
             val newPage=findViewById<EditText>(R.id.urlEnd)
             val strNewPage=newPage.text.toString()
             val projName=findViewById<EditText>(R.id.projName).text.toString()
-
             var doc: Document
 
+            val base = Databaze.dbCreator(applicationContext)
+            if (projId==-1){
+                val st=base?.getMyrDao()?.getMaxInvPartId()
+                if (st!=null) projId=st+1
+                else projId=1
+            }
+
+            SharedWisdom.start=1
+            SharedWisdom.imageDead=0
+            SharedWisdom.nameDead=0
             DoAsync {
-                doc = Jsoup.connect(PreservedSettings.page+strNewPage+".xml").get()
+                val huc: HttpURLConnection = java.net.URL(PreservedSettings.page+strNewPage+".xml").openConnection() as HttpURLConnection
+                val responseCode: Int = huc.responseCode
+                if (responseCode == 404) {
+                    SharedWisdom.all=-1
+                    SharedWisdom.start=0
+                }
+                else {
+                    doc = Jsoup.connect(PreservedSettings.page + strNewPage + ".xml").get()
 
-                val base=Databaze.dbCreator(applicationContext)
-                var inv=DbInventories(strNewPage.toInt(), 0, 0, projName)
+                    var inv = DbInventories(projId, 0, 0, projName)
+                    SharedWisdom.element=inv
+                    projId++
 
-                if (base!=null){
-                    base.getMyrDao().insertInventory(inv)
-                    SharedWisdom.communicate=projName
-                    XMLOperations.createInvPartFromXml(doc, strNewPage.toInt(), base)
+                    if (base != null) {
+                        base.getMyrDao().insertInventory(inv)
+                        SharedWisdom.communicate = projName
+                        XMLOperations.createInvPartFromXml(doc, projId-1, base)
+                    }
                 }
             }.execute()
 

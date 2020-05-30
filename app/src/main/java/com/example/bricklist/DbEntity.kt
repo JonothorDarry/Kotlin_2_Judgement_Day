@@ -88,7 +88,11 @@ interface MyDao{
     fun getColorNumber(id: Int): Int?
     @Query("select code from Parts where id= :id")
     fun getCode(id: Int): String?
+    @Query ("select count(*) from Codes where ItemID= :itemID and ColorID= :colorID and image is not null")
+    fun existImage(itemID: Int, colorID: Int): Int
 
+    @Query("select max(id) from parts where name!='Unknown'")
+    fun getMaxDefinedPartId(): Int
 
     @Query("select max(id) from InventoriesParts")
     fun getMaxInvPartId(): Int?
@@ -97,13 +101,13 @@ interface MyDao{
 
     @Query ("select count(*) from Codes where ItemID= :itemID and ColorID= :colorID")
     fun existCode(itemID: Int, colorID: Int): Int
-
     @Query ("insert into Codes(id, itemID, colorID) values(:id, :itemID, :colorID)")
     fun createCode(id: Int, itemID: Int, colorID: Int)
-
     @Query("select max(id) from codes")
     fun getMaxCode(): Int
 
+    @Query("select count(*) from inventories where id= :id")
+    fun existInv(id: Int): Int
 
 
     @Query("update InventoriesParts set QuantityInStore= :amount where id= :id")
