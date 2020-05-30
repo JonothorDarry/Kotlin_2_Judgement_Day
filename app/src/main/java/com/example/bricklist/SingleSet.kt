@@ -88,6 +88,15 @@ class SingleSet : AppCompatActivity() {
         sExpo?.setOnClickListener(){
             Exporter.exportXML(this@SingleSet, applicationContext)
         }
+
+        val isSetArch=base?.getMyrDao()?.getArchive(PreservedProjects.projectId)
+        val sArch=findViewById<Button>(R.id.archiv)
+        if (isSetArch==1) sArch.text="Unarchivize"
+        sArch.setOnClickListener {
+            base?.getMyrDao()?.setArchivize(PreservedProjects.projectId, if (isSetArch==1) 2 else 1)
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
 

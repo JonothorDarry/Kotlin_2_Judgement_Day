@@ -71,6 +71,7 @@ class XMLOperations {
                 id += 1
                 Log.d("TAG", id.toString())
             }
+            db.getMyrDao().setArchivize(InventoryID, 2)
         }
     }
 }

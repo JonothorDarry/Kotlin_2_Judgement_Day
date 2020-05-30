@@ -28,6 +28,7 @@ class Exporter {
                 val lst = base.getMyrDao().getInvParts(PreservedProjects.projectId)
                 for (x in lst){
                     val item=doc.createElement("ITEM")
+                    if (x.QuantityInSet-x.QuantityInStore==0) continue
 
                     val itemid=doc.createElement("ITEMID")
                     val itemtype=doc.createElement("ITEMTYPE")
@@ -48,7 +49,6 @@ class Exporter {
 
                     rootElement.appendChild(item)
                 }
-
             }
 
             doc.appendChild(rootElement)
@@ -68,21 +68,3 @@ class Exporter {
         }
     }
 }
-
-
-/*
-
-            val lastName=doc.createElement("last-name")
-            lastName.appendChild(doc.createTextNode("Doe"))
-            rootElement.appendChild(lastName)
-            val firstName=doc.createElement("first-name")
-            firstName.appendChild(doc.createTextNode("Doe"))
-            rootElement.appendChild(firstName)
-
-
-            rootElement.setAttribute("person-id", "1001")
-            var file=File(filepath)
-            file.appendText("record goes here")
-            val inputAsString = FileInputStream(file).bufferedReader().use { it.readText() }
-            Log.d("TAG", inputAsString)
-            */

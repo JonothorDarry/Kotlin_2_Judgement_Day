@@ -15,7 +15,7 @@ class ImageGeta {
 
 
             val image = BitmapFactory.decodeStream(java.net.URL(url).openConnection().getInputStream());
-            Log.d("TAG", image.toString())
+            if (image!=null) Log.d("TAG", image.toString())
             return image
         }
 

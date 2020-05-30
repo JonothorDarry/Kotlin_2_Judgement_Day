@@ -62,11 +62,10 @@ data class DbInventoriesParts (
 
 @Dao
 interface MyDao{
-    @Query("select * from Inventories")
-    fun getInvNames(): List<DbInventories>
-
-    @Query("select * from InventoriesParts where InventoryID= :invId")
+    //Blok wypisu invParts po ilości zebranych elementów
+    @Query("select * from InventoriesParts where InventoryID= :invId order by QuantityInSet-QuantityInStore desc")
     fun getInvParts(invId: Int): List<DbInventoriesParts>
+
 
     @Query("select id from Parts where code= :code")
     fun getItemID(code: String): List<Int>
@@ -120,15 +119,27 @@ interface MyDao{
 
     @Query("select image from codes where ColorID= :colorID and ItemID= :itemID")
     fun getImage(colorID: Int, itemID: Int): ByteArray?
-
     @Query("update codes set image= :img where ColorID= :ColorID and ItemID= :ItemID")
     fun setImage(ColorID: Int, ItemID: Int, img: ByteArray)
 
 
+    @Query("update inventories set active= :value where id= :id")
+    fun setArchivize(id: Int, value: Int=1)
+    @Query("select active from inventories where id= :id")
+    fun getArchive(id: Int): Int
 
+    //Blok wczytywania listy projektów i czasu odczytu
+    @Query("select * from Inventories where active>= :value order by lastAccessed desc")
+    fun getInvNames(value: Int=2): List<DbInventories>
+    @Query ("update inventories set lastAccessed= :time where id= :id")
+    fun changeProjectTime(id: Int, time: Int)
+    @Query ("select max(lastAccessed) from inventories")
+    fun getMaxTime(): Int
+
+
+    //Blok standardowego zapisu
     @Insert
     fun insertInventory(inventory: DbInventories)
-
     @Insert
     fun insertInventoryPart(inventoryPart: DbInventoriesParts)
 }

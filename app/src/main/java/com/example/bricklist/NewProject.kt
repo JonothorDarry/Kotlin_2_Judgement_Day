@@ -29,7 +29,7 @@ class NewProject : AppCompatActivity() {
                 doc = Jsoup.connect(PreservedSettings.page+strNewPage+".xml").get()
 
                 val base=Databaze.dbCreator(applicationContext)
-                var inv=DbInventories(strNewPage.toInt(), 1, 0, projName)
+                var inv=DbInventories(strNewPage.toInt(), 0, 0, projName)
 
                 if (base!=null){
                     base.getMyrDao().insertInventory(inv)

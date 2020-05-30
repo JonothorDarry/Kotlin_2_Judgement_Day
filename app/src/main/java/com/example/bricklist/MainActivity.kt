@@ -18,21 +18,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //val intent = Intent(this, Export::class.java)
-        //startActivity(intent)
-
         val allList=findViewById<LinearLayout>(R.id.projects)
 
         val base=Databaze.dbCreator(applicationContext)
         if (base!=null) {
             var view: TextView
 
-            val namez = base.getMyrDao().getInvNames()
+            val namez = base.getMyrDao().getInvNames(if (PreservedSettings.showArchived) 1 else 2)
             for (x in namez) {
                 view = TextView(this)
                 view.text = x.Name
                 view.setOnClickListener {
                     PreservedProjects.projectId=x.id
+                    val time=base.getMyrDao().getMaxTime()+1
+                    base.getMyrDao().changeProjectTime(x.id, time)
                     val intent = Intent(this, SingleSet::class.java)
                     startActivity(intent)
                 }
