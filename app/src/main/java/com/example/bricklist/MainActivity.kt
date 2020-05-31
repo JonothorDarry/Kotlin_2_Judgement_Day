@@ -3,6 +3,7 @@ package com.example.bricklist
 import android.app.Application
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -22,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private fun viewPrepare(view: TextView, x: DbInventories, base:Databaze?){
         if (base==null) return
         view.text = x.Name
+        //view.setBackgroundResource(android.R.drawable.editbox_background)
+        view.visibility=View.VISIBLE
         view.setOnClickListener {
             PreservedProjects.projectId=x.id
             val time=base.getMyrDao().getMaxTime()+1
@@ -50,15 +53,17 @@ class MainActivity : AppCompatActivity() {
             val namez = base.getMyrDao().getInvNames(if (PreservedSettings.showArchived) 1 else 2)
             Log.d("TAG", namez.size.toString())
             for (x in namez) {
-                view = TextView(this)
+                view = Button(this)
                 viewPrepare(view, x, base)
                 allList.addView(view)
             }
         }
         SharedWisdom.zeroIfFinished()
 
-        view = TextView(this)
+        view = Button(this)
+        view.visibility=View.INVISIBLE
         view.text=""
+
         allList.addView(view)
 
         val sSet = findViewById<Button>(R.id.settings)
@@ -95,3 +100,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+//@android:drawable/editbox_background

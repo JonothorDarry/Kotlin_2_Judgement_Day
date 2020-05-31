@@ -1,15 +1,16 @@
 package com.example.bricklist
 
+import android.R.attr.button
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.*
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.scale
-import androidx.core.view.marginLeft
 
 
 class SingleSet : AppCompatActivity() {
@@ -34,10 +35,10 @@ class SingleSet : AppCompatActivity() {
             var plname: String?
             var wisdom: LinearLayout
 
-            var vk : LinearLayout
+            //var vk : LinearLayout
 
             for (x in lst) {
-                vk =TableLayout(this)
+                var vk =TableLayout(this)
                 vk.layoutParams=ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                 vk.orientation=LinearLayout.VERTICAL
 
@@ -71,22 +72,29 @@ class SingleSet : AppCompatActivity() {
                         image.setImageBitmap(BitmapFactory.decodeByteArray(barray, 0, barray.size).scale(300, 300))
                     }
                 }
+
                 image.maxWidth=540
                 image.minimumWidth=540
                 name.maxWidth=540
                 name.minWidth=540
 
+                //plusButt.layoutParams=ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                //minusButt.layoutParams=ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
-                buttons.layoutParams=ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+                buttons.layoutParams=ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 vk.layoutParams=ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
                 minusButt.setOnClickListener {
                     Buttonizer.change(-1, x, enumera)
+                    if (x.QuantityInStore!=x.QuantityInSet) vk.setBackgroundColor(Color.rgb(255, 255, 255))
                 }
 
                 plusButt.setOnClickListener {
                     Buttonizer.change(1, x, enumera)
+                    if (x.QuantityInStore==x.QuantityInSet) vk.setBackgroundColor(Color.rgb(204, 255, 153))
                 }
+                if (x.QuantityInStore==x.QuantityInSet) vk.setBackgroundColor(Color.rgb(204, 255, 153))
 
                 wisdom.addView(name)
                 wisdom.addView(color_id)
