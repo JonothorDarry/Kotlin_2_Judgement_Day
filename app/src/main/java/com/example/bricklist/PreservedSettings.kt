@@ -11,6 +11,9 @@ class PreservedSettings : Application(){
     companion object {
         var showArchived=false
         var page = "http://fcds.cs.put.poznan.pl/MyWeb/BL/"
+        var condition="U"
+        var format="Name"
+        var fileDir="/mnt/sdcard/DCIM/"
 
 
 

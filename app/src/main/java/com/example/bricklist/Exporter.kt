@@ -17,7 +17,7 @@ import javax.xml.transform.stream.StreamResult
 class Exporter {
     companion object{
         fun exportXML(activity: Activity, context: Context){
-            PreservedSettings.verifyStoragePermissions(activity)
+            //PreservedSettings.verifyStoragePermissions(activity)
             val docBuilder: DocumentBuilder=DocumentBuilderFactory.newInstance().newDocumentBuilder()
             val doc=docBuilder.newDocument()
 
@@ -34,9 +34,9 @@ class Exporter {
                     val itemtype=doc.createElement("ITEMTYPE")
                     val color=doc.createElement("COLOR")
                     val qtyfilled=doc.createElement("QTYFILLED")
+
                     color.appendChild(doc.createTextNode(base.getMyrDao().getColorNumber(x.ColorID)?.toString()))
                     qtyfilled.appendChild(doc.createTextNode((x.QuantityInSet-x.QuantityInStore).toString()))
-
                     var code=base.getMyrDao().getCode(x.ItemID)
                     if (code==null) code=""
                     itemid.appendChild(doc.createTextNode(code))
@@ -46,6 +46,12 @@ class Exporter {
                     item.appendChild(itemtype)
                     item.appendChild(color)
                     item.appendChild(qtyfilled)
+
+                    if (PreservedSettings.condition!="Omit"){
+                        val cond=doc.createElement("CONDITION")
+                        cond.appendChild(doc.createTextNode(PreservedSettings.condition))
+                        item.appendChild(cond)
+                    }
 
                     rootElement.appendChild(item)
                 }
@@ -57,14 +63,15 @@ class Exporter {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes")
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2")
 
-            val filepath = "/mnt/sdcard/DCIM/"
+            val filepath = PreservedSettings.fileDir
+            val outDir=File(filepath)
+            outDir.mkdirs()
 
-            val outDir=File(filepath, "Output")
-            outDir.mkdir()
-            val file=File(outDir, "Text.xml")
+            var file: File
+            if (PreservedSettings.format=="Name") file=File(outDir, "${base?.getMyrDao()?.getNameByProjectId(PreservedProjects.projectId)}.xml")
+            else file=File(outDir, "${base?.getMyrDao()?.getNameByProjectId(PreservedProjects.projectId)}${PreservedProjects.projectId}.xml")
             file.createNewFile()
             transformer.transform(DOMSource(doc), StreamResult(file))
-
         }
     }
 }

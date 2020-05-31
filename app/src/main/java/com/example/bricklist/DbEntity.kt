@@ -136,6 +136,9 @@ interface MyDao{
     @Query ("select max(lastAccessed) from inventories")
     fun getMaxTime(): Int
 
+    @Query("select name from inventories where id= :id")
+    fun getNameByProjectId(id: Int): String
+
 
     //Blok standardowego zapisu
     @Insert
