@@ -2,9 +2,8 @@ package com.example.bricklist
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
-import org.jsoup.Jsoup
 import java.net.HttpURLConnection
+import java.net.URL
 
 class ImageGeta {
     companion object{
@@ -13,10 +12,7 @@ class ImageGeta {
             val responseCode: Int = huc.responseCode
             if (responseCode == 404) return null
 
-
-            val image = BitmapFactory.decodeStream(java.net.URL(url).openConnection().getInputStream());
-            if (image!=null) Log.d("TAG", image.toString())
-            return image
+            return BitmapFactory.decodeStream(URL(url).openConnection().getInputStream())
         }
 
         fun getImage(colorID: Int, itemID: Int): Bitmap?{
@@ -41,9 +37,7 @@ class ImageGeta {
             im1=checkExistence("$st2$kolor/$itype.gif")
             if (im1!=null) return im1
 
-            Log.d("TAG", "$st3$itype.jpg")
             im1= checkExistence("$st3$itype.jpg")
-            if (im1!=null) Log.d("TAG","KAPPA Fchuj")
             return im1
         }
     }

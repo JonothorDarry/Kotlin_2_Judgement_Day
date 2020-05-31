@@ -1,22 +1,16 @@
 package com.example.bricklist
 
-import android.app.Application
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.size
+import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
 import kotlin.concurrent.fixedRateTimer
+import kotlin.math.floor
 
 
 class MainActivity : AppCompatActivity() {
@@ -52,7 +46,6 @@ class MainActivity : AppCompatActivity() {
 
         if (base!=null) {
             val namez = base.getMyrDao().getInvNames(if (PreservedSettings.showArchived) 1 else 2)
-            Log.d("TAG", namez.size.toString())
             for (x in namez) {
                 view = Button(this)
                 viewPrepare(view, x, base)
@@ -76,8 +69,14 @@ class MainActivity : AppCompatActivity() {
         fixedRateTimer("timer", false, 0L, 1500) {
             this@MainActivity.runOnUiThread {
                 projectText.text = SharedWisdom.communicate
-                if (SharedWisdom.all<0) infText.text="The URL is incorrect, there is no such xml"
-                else infText.text=SharedWisdom.current.toString()+" of "+SharedWisdom.all.toString()+" items were processed"
+                if (SharedWisdom.all!=0) infText.isVisible=true
+                if (SharedWisdom.all==0) infText.isVisible=false
+                else if (SharedWisdom.all<0) infText.text="The URL is incorrect, there is no such xml"
+                else {
+                    infText.text=SharedWisdom.current.toString()+" of "+SharedWisdom.all.toString()+" items were processed"
+                    progress.setProgress(floor((1.0 * SharedWisdom.current) / (1.0*SharedWisdom.all)*100).toInt(), true)
+                }
+
                 if (SharedWisdom.current==SharedWisdom.all && SharedWisdom.all!=0){
                     preciseText.text="Project is finished, ${SharedWisdom.imageDead} images and ${SharedWisdom.nameDead} names were not found "
                 }
@@ -92,7 +91,6 @@ class MainActivity : AppCompatActivity() {
         val sNew = findViewById<Button>(R.id.newp)
         sNew?.setOnClickListener(){
             if (SharedWisdom.isProcess()) urDead.text="You cannot create new project while one is still being dowloaded!"
-
             else {
                 SharedWisdom.zeroIfFinished()
                 val intent = Intent(this, NewProject::class.java)

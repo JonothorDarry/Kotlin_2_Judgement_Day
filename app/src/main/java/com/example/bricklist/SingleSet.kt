@@ -1,6 +1,8 @@
 package com.example.bricklist
 
 import android.R.attr.button
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -11,9 +13,82 @@ import android.widget.*
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.scale
+import kotlinx.android.synthetic.main.activity_single_set.*
+import org.w3c.dom.Element
+import java.io.File
+import java.lang.Exception
+import javax.xml.parsers.DocumentBuilder
+import javax.xml.parsers.DocumentBuilderFactory
+import javax.xml.transform.OutputKeys
+import javax.xml.transform.Transformer
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.dom.DOMSource
+import javax.xml.transform.stream.StreamResult
 
 
 class SingleSet : AppCompatActivity() {
+
+    private fun exportXML(activity: Activity, context: Context){
+        val docBuilder: DocumentBuilder=DocumentBuilderFactory.newInstance().newDocumentBuilder()
+        val doc=docBuilder.newDocument()
+
+
+        val rootElement: Element =doc.createElement("INVENTORY")
+        val base=Databaze.dbCreator(context)
+        if (base!=null) {
+            val lst = base.getMyrDao().getInvParts(PreservedProjects.projectId)
+            for (x in lst){
+                val item=doc.createElement("ITEM")
+                if (x.QuantityInSet-x.QuantityInStore==0) continue
+
+                val itemid=doc.createElement("ITEMID")
+                val itemtype=doc.createElement("ITEMTYPE")
+                val color=doc.createElement("COLOR")
+                val qtyfilled=doc.createElement("QTYFILLED")
+
+                color.appendChild(doc.createTextNode(base.getMyrDao().getColorNumber(x.ColorID)?.toString()))
+                qtyfilled.appendChild(doc.createTextNode((x.QuantityInSet-x.QuantityInStore).toString()))
+                var code=base.getMyrDao().getCode(x.ItemID)
+                if (code==null) code=""
+                itemid.appendChild(doc.createTextNode(code))
+                itemtype.appendChild(doc.createTextNode(base.getMyrDao().getTypeCode(x.TypeID)))
+
+                item.appendChild(itemid)
+                item.appendChild(itemtype)
+                item.appendChild(color)
+                item.appendChild(qtyfilled)
+
+                if (PreservedSettings.condition!="Omit"){
+                    val cond=doc.createElement("CONDITION")
+                    cond.appendChild(doc.createTextNode(PreservedSettings.condition))
+                    item.appendChild(cond)
+                }
+
+                rootElement.appendChild(item)
+            }
+        }
+
+        doc.appendChild(rootElement)
+
+        val transformer: Transformer =TransformerFactory.newInstance().newTransformer()
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes")
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2")
+
+        try{
+            val filepath = PreservedSettings.fileDir
+            val outDir=File(filepath)
+            outDir.mkdirs()
+
+            var file: File
+            if (PreservedSettings.format=="Name") file=File(outDir, "${base?.getMyrDao()?.getNameByProjectId(PreservedProjects.projectId)}.xml")
+            else file=File(outDir, "${base?.getMyrDao()?.getNameByProjectId(PreservedProjects.projectId)}${PreservedProjects.projectId}.xml")
+            file.createNewFile()
+            transformer.transform(DOMSource(doc), StreamResult(file))
+        }
+        catch (e: Exception){
+            exportError.text="Failed to create file"
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,10 +153,6 @@ class SingleSet : AppCompatActivity() {
                 name.maxWidth=540
                 name.minWidth=540
 
-                //plusButt.layoutParams=ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                //minusButt.layoutParams=ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-
-
                 buttons.layoutParams=ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 vk.layoutParams=ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
@@ -120,7 +191,7 @@ class SingleSet : AppCompatActivity() {
 
         val sExpo=findViewById<Button>(R.id.exporter)
         sExpo?.setOnClickListener(){
-            Exporter.exportXML(this@SingleSet, applicationContext)
+            exportXML(this@SingleSet, applicationContext)
         }
 
         val isSetArch=base?.getMyrDao()?.getArchive(PreservedProjects.projectId)

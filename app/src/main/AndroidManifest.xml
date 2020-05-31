@@ -16,7 +16,6 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SingleSet"></activity>
-        <activity android:name=".Export" />
         <activity android:name=".NewProject" />
         <activity
             android:name=".Settings"

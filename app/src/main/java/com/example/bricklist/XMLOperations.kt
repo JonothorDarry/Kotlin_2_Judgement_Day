@@ -1,7 +1,6 @@
 package com.example.bricklist
 
 import android.graphics.Bitmap
-import android.util.Log
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import java.io.ByteArrayOutputStream
@@ -20,7 +19,6 @@ class XMLOperations {
             if (PreservedProjects.partsBelowUndefined==-1){
                 val st=db.getMyrDao().getMaxDefinedPartId()
                 PreservedProjects.partsBelowUndefined=st
-                Log.d("ASD", st.toString())
             }
 
             var y: Element
@@ -61,7 +59,6 @@ class XMLOperations {
                 vect=db.getMyrDao().getItemID(itemid)
                 if (vect.isNotEmpty()) {
                     ItemID=vect[0]
-                    Log.d("ASD", ItemID.toString())
                     if (ItemID>PreservedProjects.partsBelowUndefined) SharedWisdom.nameDead++
                 }
                 else {
@@ -93,8 +90,6 @@ class XMLOperations {
 
                 SharedWisdom.current+=1
                 id += 1
-
-                Log.d("TAG", id.toString())
             }
             db.getMyrDao().setArchivize(InventoryID, 2)
             SharedWisdom.finish=1
