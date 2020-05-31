@@ -36,7 +36,10 @@ class SingleSet : AppCompatActivity() {
         val rootElement: Element =doc.createElement("INVENTORY")
         val base=Databaze.dbCreator(context)
         if (base!=null) {
-            val lst = base.getMyrDao().getInvParts(PreservedProjects.projectId)
+            var lst: List<DbInventoriesParts>
+            if (PreservedSettings.getBy=="Color") lst = base.getMyrDao().getInvPartsByColor(PreservedProjects.projectId)
+            else lst = base.getMyrDao().getInvPartsByItem(PreservedProjects.projectId)
+
             for (x in lst){
                 val item=doc.createElement("ITEM")
                 if (x.QuantityInSet-x.QuantityInStore==0) continue
@@ -97,7 +100,9 @@ class SingleSet : AppCompatActivity() {
         val allList=findViewById<LinearLayout>(R.id.showSet)
         val base=Databaze.dbCreator(applicationContext)
         if (base!=null) {
-            val lst = base.getMyrDao().getInvParts(PreservedProjects.projectId)
+            var lst: List<DbInventoriesParts>
+            if (PreservedSettings.getBy=="Color") lst = base.getMyrDao().getInvPartsByColor(PreservedProjects.projectId)
+            else lst = base.getMyrDao().getInvPartsByItem(PreservedProjects.projectId)
 
             var name :TextView
             var color_id: TextView

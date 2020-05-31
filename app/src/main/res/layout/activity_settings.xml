@@ -31,43 +31,43 @@
         android:id="@+id/textView3"
         android:layout_width="109dp"
         android:layout_height="25dp"
-        android:layout_marginStart="144dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
         android:text="Prefix of URL"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/showarch" />
 
     <EditText
         android:id="@+id/url"
-        android:layout_width="354dp"
+        android:layout_width="200dp"
         android:layout_height="46dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="26dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="http://fcds.cs.put.poznan.pl/MyWeb/BL/"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <Button
-        android:id="@+id/saver"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginBottom="48dp"
-        android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/showarch" />
 
     <Button
         android:id="@+id/returner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="80dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginTop="61dp"
+        android:layout_marginEnd="84dp"
         android:text="@android:string/cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preferenceSpinner" />
+
+    <Button
+        android:id="@+id/saver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="66dp"
+        android:text="Save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <TextView
         android:id="@+id/textView6"
@@ -92,73 +92,63 @@
         app:layout_constraintTop_toBottomOf="@+id/url" />
 
     <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="84dp"
-        android:text="Condition"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-    <RadioGroup
-        android:id="@+id/conditionGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="92dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fileDir">
-
-        <RadioButton
-            android:id="@+id/newRadio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="New" />
-
-        <RadioButton
-            android:id="@+id/usedRadio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Used" />
-
-        <RadioButton
-            android:id="@+id/omitRadio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Omit" />
-    </RadioGroup>
-
-    <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="40dp"
         android:text="Save Format"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-    <RadioGroup
-        android:id="@+id/formatGroup"
+    <Spinner
+        android:id="@+id/conditionSpinner"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="164dp"
+        android:layout_marginTop="31dp"
+        android:entries="@array/condition"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fileDir" />
+
+    <TextView
+        android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="68dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="52dp"
+        android:text="Condition"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <Spinner
+        android:id="@+id/formatSpinner"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="44dp"
+        android:entries="@array/format"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/conditionGroup">
+        app:layout_constraintTop_toBottomOf="@+id/conditionSpinner" />
 
-        <RadioButton
-            android:id="@+id/nameRadio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Name" />
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="35dp"
+        android:text="Ordering preference"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-        <RadioButton
-            android:id="@+id/nameIdRadio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Name+id" />
-    </RadioGroup>
+    <Spinner
+        android:id="@+id/preferenceSpinner"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="44dp"
+        android:entries="@array/order"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/formatSpinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

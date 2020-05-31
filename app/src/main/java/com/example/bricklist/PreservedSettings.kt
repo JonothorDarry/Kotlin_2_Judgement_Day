@@ -14,7 +14,7 @@ class PreservedSettings : Application(){
         var condition="U"
         var format="Name"
         var fileDir="/mnt/sdcard/DCIM/"
-
+        var getBy="Color"
 
 
         // Storage Permissions
