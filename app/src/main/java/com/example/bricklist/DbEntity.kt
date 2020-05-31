@@ -96,11 +96,12 @@ interface MyDao{
 
     @Query("select max(id) from parts where name!='Unknown'")
     fun getMaxDefinedPartId(): Int
-
     @Query("select max(id) from InventoriesParts")
     fun getMaxInvPartId(): Int?
     @Query("select max(id) from Parts")
     fun getMaxPartsId(): Int
+    @Query("select max(id) from Inventories")
+    fun getMaxInvId(): Int
 
     @Query ("select count(*) from Codes where ItemID= :itemID and ColorID= :colorID")
     fun existCode(itemID: Int, colorID: Int): Int

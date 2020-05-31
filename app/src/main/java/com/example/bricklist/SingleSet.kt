@@ -91,6 +91,18 @@ class SingleSet : AppCompatActivity() {
         }
     }
 
+    private fun change(amount: Int, obj: DbInventoriesParts, changer: TextView){
+        if (obj.QuantityInStore+amount < 0 || obj.QuantityInStore+amount > obj.QuantityInSet) return
+        val db=Databaze.myDb
+
+        if (db!=null)  {
+            db.getMyrDao().updateStore(obj.QuantityInStore+amount, obj.id)
+            obj.QuantityInStore+=amount
+            changer.text=obj.QuantityInStore.toString()+" of "+obj.QuantityInSet.toString()
+        }
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single_set)
@@ -161,12 +173,12 @@ class SingleSet : AppCompatActivity() {
                 vk.layoutParams=ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
                 minusButt.setOnClickListener {
-                    Buttonizer.change(-1, x, enumera)
+                    change(-1, x, enumera)
                     if (x.QuantityInStore!=x.QuantityInSet) vk.setBackgroundColor(Color.rgb(255, 255, 255))
                 }
 
                 plusButt.setOnClickListener {
-                    Buttonizer.change(1, x, enumera)
+                    change(1, x, enumera)
                     if (x.QuantityInStore==x.QuantityInSet) vk.setBackgroundColor(Color.rgb(204, 255, 153))
                 }
                 if (x.QuantityInStore==x.QuantityInSet) vk.setBackgroundColor(Color.rgb(204, 255, 153))

@@ -19,7 +19,6 @@ class NewProject : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_new_project)
 
         val sOK = findViewById<Button>(R.id.ok)
@@ -35,7 +34,7 @@ class NewProject : AppCompatActivity() {
 
                 val base = Databaze.dbCreator(applicationContext)
                 if (projId == -1) {
-                    val st = base?.getMyrDao()?.getMaxInvPartId()
+                    val st = base?.getMyrDao()?.getMaxInvId()
                     if (st != null) projId = st + 1
                     else projId = 1
                 }
