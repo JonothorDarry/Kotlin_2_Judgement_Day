@@ -44,25 +44,31 @@ class NewProject : AppCompatActivity() {
                 SharedWisdom.imageDead = 0
                 SharedWisdom.nameDead = 0
                 DoAsync {
-                    val huc: HttpURLConnection =
-                        java.net.URL(PreservedSettings.page + strNewPage + ".xml").openConnection() as HttpURLConnection
-                    val responseCode: Int = huc.responseCode
-                    if (responseCode == 404) {
+                    try{
+                        val huc: HttpURLConnection =
+                            java.net.URL(PreservedSettings.page + strNewPage + ".xml").openConnection() as HttpURLConnection
+                        val responseCode: Int = huc.responseCode
+                        if (responseCode == 404) {
+                            SharedWisdom.all = -1
+                            SharedWisdom.start = 0
+                        }
+                        else {
+                            doc = Jsoup.connect(PreservedSettings.page + strNewPage + ".xml").get()
+
+                            var inv = DbInventories(projId, 0, 0, projName)
+                            SharedWisdom.element = inv
+                            projId++
+
+                            if (base != null) {
+                                base.getMyrDao().insertInventory(inv)
+                                SharedWisdom.communicate = projName
+                                XMLOperations.createInvPartFromXml(doc, projId - 1, base)
+                            }
+                        }
+                    }
+                    catch(e: Exception){
                         SharedWisdom.all = -1
                         SharedWisdom.start = 0
-                    }
-                    else {
-                        doc = Jsoup.connect(PreservedSettings.page + strNewPage + ".xml").get()
-
-                        var inv = DbInventories(projId, 0, 0, projName)
-                        SharedWisdom.element = inv
-                        projId++
-
-                        if (base != null) {
-                            base.getMyrDao().insertInventory(inv)
-                            SharedWisdom.communicate = projName
-                            XMLOperations.createInvPartFromXml(doc, projId - 1, base)
-                        }
                     }
                 }.execute()
 

@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        PreservedSettings.verifyStoragePermissions(this@MainActivity)
 
         val allList=findViewById<LinearLayout>(R.id.projects)
 

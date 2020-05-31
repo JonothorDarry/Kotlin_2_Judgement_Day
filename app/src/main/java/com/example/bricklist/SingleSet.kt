@@ -36,9 +36,7 @@ class SingleSet : AppCompatActivity() {
         val rootElement: Element =doc.createElement("INVENTORY")
         val base=Databaze.dbCreator(context)
         if (base!=null) {
-            var lst: List<DbInventoriesParts>
-            if (PreservedSettings.getBy=="Color") lst = base.getMyrDao().getInvPartsByColor(PreservedProjects.projectId)
-            else lst = base.getMyrDao().getInvPartsByItem(PreservedProjects.projectId)
+            var lst = base.getMyrDao().getInvPartsByColor(PreservedProjects.projectId)
 
             for (x in lst){
                 val item=doc.createElement("ITEM")
@@ -96,6 +94,7 @@ class SingleSet : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single_set)
+        PreservedSettings.verifyStoragePermissions(this@SingleSet)
 
         val allList=findViewById<LinearLayout>(R.id.showSet)
         val base=Databaze.dbCreator(applicationContext)
@@ -145,11 +144,11 @@ class SingleSet : AppCompatActivity() {
                     else name.text = Databaze.myDb?.getMyrDao()?.getName(x.ItemID)
 
 
-                    color_id.text=Databaze.myDb?.getMyrDao()?.getColor(x.ColorID)+" ["+Databaze.myDb?.getMyrDao()?.getCode(x.ItemID)+"]"
-                    enumera.text=x.QuantityInStore.toString()+" of "+x.QuantityInSet.toString()
+                    color_id.text="${Databaze.myDb?.getMyrDao()?.getColor(x.ColorID)} [${Databaze.myDb?.getMyrDao()?.getCode(x.ItemID)}]"
+                    enumera.text="${x.QuantityInStore.toString()} of ${x.QuantityInSet.toString()}"
                     barray=Databaze.myDb?.getMyrDao()?.getImage(x.ColorID, x.ItemID)
                     if (barray!=null){
-                        image.setImageBitmap(BitmapFactory.decodeByteArray(barray, 0, barray.size).scale(300, 300))
+                        image.setImageBitmap(BitmapFactory.decodeByteArray(barray, 0, barray.size).scale(200, 200))
                     }
                 }
 
@@ -209,25 +208,3 @@ class SingleSet : AppCompatActivity() {
         }
     }
 }
-
-
-
-
-
-
-/*
-val param2 = view.layoutParams as ViewGroup.MarginLayoutParams
-param2.setMargins(100,100,0,100)
-view.layoutParams = param2*/
-/*v2.layoutParams=LinearLayout.LayoutParams(
-    ViewGroup.LayoutParams.WRAP_CONTENT,
-    ViewGroup.LayoutParams.WRAP_CONTENT
-)
-val param = v2.layoutParams as ViewGroup.MarginLayoutParams
-param.setMargins(0,100,100,100)
-v2.layoutParams = param
-
-wrapperLayout.gravity=Gravity.LEFT
-                wrapperLayout.layoutParams=ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                (wrapperLayout.layoutParams as LinearLayout.LayoutParams).weight= 0.5F
-*/

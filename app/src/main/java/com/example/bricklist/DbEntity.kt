@@ -65,7 +65,7 @@ interface MyDao{
     //Blok wypisu invParts po ilości zebranych elementów
     @Query("select * from InventoriesParts where InventoryID= :invId order by QuantityInSet-QuantityInStore>0 desc, ColorID")
     fun getInvPartsByColor(invId: Int): List<DbInventoriesParts>
-    @Query("select * from InventoriesParts i left join Parts p on i.ItemID=p.id where InventoryID= :invId order by QuantityInSet-QuantityInStore>0 desc, p.Name")
+    @Query("select i.* from InventoriesParts i left join Parts p on i.ItemID=p.id where InventoryID= :invId order by QuantityInSet-QuantityInStore>0 desc, p.Name")
     fun getInvPartsByItem(invId: Int): List<DbInventoriesParts>
 
 
